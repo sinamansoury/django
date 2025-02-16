@@ -1,0 +1,30 @@
+
+    <div class="w-100">
+        <ul class="list-group">
+            <li class="list-group-item">
+                <a class="fa fa-user {% if request.resolver_match.url_name == 'User_panel' %}active{% endif %}" href="{% url 'User_panel' %}">
+                    <span >پنل کاربری</span>
+                </a>
+            </li>
+            <li class="list-group-item">
+                <a class="fa fa-check-circle {% if request.resolver_match.url_name == 'Authenticated' %}active{% endif %}" href="{% url 'Authenticated' %}">
+                    <span>احراز هویت</span>
+                </a>
+            </li>
+            <li class="list-group-item">
+                <a class="fa fa-pencil {% if request.resolver_match.url_name == 'Edit-profile' %}active{% endif %}" href="{% url 'Edit-profile' %}">
+                    <span>ویرایش اطلاعات</span>
+                </a>
+            </li>
+            <li class="list-group-item">
+                <a class="fa fa-shopping-cart {% if request.resolver_match.url_name == 'rent-orders' %}active{% endif %}" href="{% url 'rent-orders' %}">
+                    <span>سفارش های من</span>
+                </a>
+            </li>
+            <li class="list-group-item">
+                <a class="fa fa-lock {% if request.resolver_match.url_name == 'Change-password' %}active{% endif %}" href="{% url 'Change-password' %}">
+                    <span>تغییر کلمه عبور</span>
+                </a>
+            </li>
+        </ul>
+    </div>

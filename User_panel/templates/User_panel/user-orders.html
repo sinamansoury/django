@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+{% load render_partial %}
+{% load thumbnail %}
+{% load poll_extras %}
+
+{% block title %}
+    سفارش های من
+{% endblock %}
+
+{% block content %}
+<div class="container" style="width: 500px; margin:0 140px">
+    <div class="breadcrumbs">
+        <ol class="breadcrumb" style="margin-right: 250px; margin-bottom: 50px">
+            <li><a href="{% url 'orders' %}">فروش</a></li>
+            <li><a href="{% url 'rent-orders' %}">اجاره</a></li>
+        </ol>
+    </div>
+</div>
+<div class="row">
+
+    <div class="" style="padding: 0 5px">
+        {% if order %}
+            {% include 'User_panel/user-rent-orders.html' %}
+        {% elif orders %}
+            {% include 'User_panel/user-sale-orders.html' %}
+        {% else %}
+            <div class="col-md-12">
+                <div class="alert alert-warning" style="margin-top: 20px;width: 70%">
+                    <p>شما سفارشی ندارید</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

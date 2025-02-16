@@ -1,0 +1,102 @@
+{% extends 'layout.html' %}
+{% load thumbnail %}
+{% load poll_extras %}
+{% load render_partial %}
+{% block title %}
+	لیست محصولات
+{% endblock %}
+
+{% block content %}
+    <section>
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-9 padding-right">
+					<div class="features_items">
+						<h2 class="title text-center">محصولات </h2>
+						{% for product in object_list %}
+                            {% include 'Rent/rent_page.html' with product=product %}
+                        {% endfor %}
+
+						<div class="clearfix"></div>
+						<ul class="pagination">
+                            {% if page_obj.has_previous %}
+                                <li><a onclick="fiterPageNumber({{ page_obj.previous_page_number }})">قبلی</a></li>
+                            {% endif %}
+                            {% for page in paginator %}
+                                <li class="{% if page_obj.number == page.number %}active{% endif %}"><a onclick="fiterPageNumber({{ page.number }})">{{ page.number }}</a></li>
+                            {% endfor %}
+                            {% if page_obj.has_next %}
+                                <li><a onclick="fiterPageNumber({{ page_obj.next_page_number }})">بعدی</a></li>
+                            {% endif %}
+						</ul>
+					</div>
+				</div>
+
+				<div class="col-sm-3">
+					<div class="left-sidebar">
+						{% render_partial 'Rent.views.rent_category_components' %}
+
+                <div class="price-range">
+                    <h2>فیلتـر قیمـت</h2>
+                    <div class="well">
+                        <input type="text" class="span2"
+                               value="{{ start_price }},{{ end_price }}"
+                               data-slider-min="0"
+                               data-slider-max="{{ end_price }}"
+                               data-slider-step="10000"
+                               data-slider-value="[{{ start_price }},{{ end_price }}]" id="sl2" ><br />
+                        <b>{{ end_price }}</b> <b class="pull-left">0 </b>
+
+                    <div class="button">
+                        <form method="get" id="filter_form">
+                            <input type="hidden" name="start_price" id="start_price" value="{{ start_price }}">
+                            <input type="hidden" name="end_price" id="end_price" value="{{ end_price }}">
+                            <input type="hidden" name="page" id="page" value="{{ page_obj.number }}">
+                        </form>
+                        <button type="button" class="btn btn-warning btn-block" onclick="filterForm()" >فیلتر</button>
+                    </div>
+                    </div>
+                    </div>
+                </div>
+{#                    <div class="shipping text-center"><!--shipping-->#}
+{#							{% for banner in banners %}#}
+{#                                {% thumbnail banner.image "300x200"  crop="center" as im %}#}
+{#                                    <br>#}
+{#                                    <a href="{{ banner.url_title }}">#}
+{#                                        <img  class="main object" src="{{ im.url }}" alt="{{ banner.title }}">#}
+{#                                    </a>#}
+{#                                {% endthumbnail %}#}
+{#							{% endfor %}#}
+{##}
+{#                    </div><!--/shipping-->#}
+			</div>
+		</div>
+	</section>
+
+    <script>
+        function filterForm(){
+            const filter_value = $('#sl2').val();
+            const start_price = filter_value.split(',')[0];
+            const end_price = filter_value.split(',')[1];
+            $('#start_price').val(start_price);
+            $('#end_price').val(end_price);
+            $('#filter_form').submit()
+         }
+        function fiterPageNumber(page){
+            const currentStartPrice = $('#start_price').val();
+            const currentEndPrice = $('#end_price').val();
+            const filter_value = $('#sl2').val();
+            const start_price = filter_value.split(',')[0];
+            const end_price = filter_value.split(',')[1];
+            if (start_price === currentStartPrice && end_price === currentEndPrice) {
+                const url = new URL(window.location.href);
+                url.searchParams.set('page', page);
+                history.pushState(null, '', url.toString());
+                window.location.href = url.toString();
+            } else{
+                $('#page').val(page);
+                $('#filter_form').submit()
+            }
+         }
+    </script>
+{% endblock %}

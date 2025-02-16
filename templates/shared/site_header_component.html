@@ -1,0 +1,86 @@
+<header id="header">
+		<div class="header-middle">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-4" style="text-align: left;">
+						<div class="logo">
+							<a href="{% url 'index' %}"><img src="{{ site_setting_logo.logo.url }}" alt="Logo" style="text-align: center;box-shadow: None;padding-left: 0" /></a>
+						</div>
+					</div>
+					
+					<div class="col-sm-8 header-middle-menu">
+						<div class="shop-menu pull-right">
+							<ul class="nav navbar-nav">
+								{% if request.user.is_authenticated %}
+                                    {% if request.user.is_superuser %}
+                                        <li><a href="{% url 'User_panel' %}"><i class="fa fa-user"></i> {{ user.get_full_name }}</a></li>
+                                    	<li><a href="/admin"><i class="fa fa-user"></i> پنل ادمین</a></li>
+                                        <li><a href="{% url 'User-basket' %}"><i class="fa fa-shopping-cart"></i> سبد خرید</a></li>
+                                        <li><a href="{% url 'Logout' %}"><i class="fa fa-sign-out"></i> خروج</a></li>
+                                     {% else %}
+                                        <li><a href="#"><i class="fa fa-user"></i>{{ user.get_full_name }}</a></li>
+                                        <li><a href="#"><i class="fa fa-shopping-cart"></i> سبد خرید</a></li>
+                                        <li><a href="{% url 'Logout' %}"><i class="fa fa-sign-out"></i> خروج</a></li>    
+                                    {% endif %}
+                                {% else %}    
+                                    <li><a href="{% url 'Signup' %}"><i class="fa fa-lock"></i> ثبت نام</a></li>
+                                    <li><a href="{% url 'Login' %}"><i class="fa fa-sign-in"></i> ورود</a></li>
+								{% endif %} 
+                            
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="header-bottom">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-3">
+						<div class="search_box pull-left">
+							<input class="search-input" type="text" placeholder="جستـجو">
+						</div>
+					</div>
+					<div class="col-sm-9">
+						<div class="mainmenu pull-right">
+							<ul class="nav navbar-nav">
+								<li><a href="{% url 'index' %}" 
+                                       class="{% if request.resolver_match.url_name == 'index' %}active{% endif %}">
+                                        خـانه
+                                    </a>
+                                </li>
+								<li class="dropdown">
+                                    <a  class=" cursor-pointer {% if request.resolver_match.url_name == 'product_list' or request.resolver_match.url_name == 'rent-view' %}active{% endif %}" data-toggle="dropdown">
+                                        محصولات
+                                        <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu" >
+                                        <li>
+                                            <a href="{% url 'product_list' %}" class="{% if request.resolver_match.url_name == 'product_list' %}active{% endif %}">خرید</a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'rent-view' %}" class="{% if request.resolver_match.url_name == 'rent-view' %}active{% endif %}">اجاره</a>
+                                        </li>
+                                    </ul>
+                                </li>
+								<li>   
+                                    <a href="{% url 'About_Us' %}" class="{% if request.resolver_match.url_name == 'About_Us' %}active{% endif %}">درباره مـا</a>
+                                </li>
+								<li>
+                                    <a href="{% url 'contact_us' %}" class="{% if request.resolver_match.url_name == 'contact_us' %}active{% endif %}">تماس با مـا</a>
+                                </li>
+							</ul>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</header>
+<script>
+        document.querySelector('.search-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                alert('در حال جستجو برای: ' + this.value);
+            }
+        });
+    </script>

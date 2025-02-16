@@ -1,0 +1,316 @@
+{% extends 'layout.html' %}
+{% load thumbnail %}
+{% load render_partial %}
+{% load poll_extras %}
+{% block title %}
+{{ rent.title}}
+{% endblock %}
+{% block header_references %}
+    <link rel="stylesheet" href="/static/lib/css/lightbox.min.css">
+
+{% endblock %}
+{% block footer_references %}
+    <script src="/static/lib/js/lightbox.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{% endblock %}
+{% block content %}
+    <section>
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-9 padding-right">
+					<div class="product-details"><!--product-details-->
+						<div class="col-sm-5">
+							<div class="view-product">
+                                {% if rent.image %}
+                                    <img src="{{ rent.image.url }}" alt="" id="main_image">
+                                {% else %}
+                                    <img src="/static/images/product-details/1.jpg" alt="" id="main_image">
+                                {% endif %}
+                                <a id="show_large_modal" href="{{ rent.image.url }}" data-lightbox="product-image">
+                                    <h3 >
+                                        بزرگنمایی
+                                    </h3>
+                                </a>
+
+							</div>
+							<div id="similar-product" class="carousel slide" data-ride="carousel">
+								    <div class="carousel-inner">
+										  {% for group in gallery %}
+                                              <div class="item {% if forloop.first %}active{% endif %}">
+                                                  {% for image in group %}
+                                                      <a onclick="showLargeImage('{{ image.image.url }}')" >
+                                                        {% thumbnail image.image '85x85' crop='center' as im %}
+                                                            <img src="{{ im.url }}" alt="">
+                                                        {% endthumbnail %}
+                                                      </a>
+                                                  {% endfor %}
+                                              </div>
+										  {% endfor %}
+									</div>
+								  <a class="right item-control" href="#similar-product" data-slide="next">
+									<i class="fa fa-angle-right"></i>
+								  </a>
+								  <a class="left item-control" href="#similar-product" data-slide="prev">
+									<i class="fa fa-angle-left"></i>
+								  </a>
+							</div>
+						</div>
+						<div class="col-sm-7">
+							<div class="product-information">
+								<div>
+									<h2>{{ rent.title }}</h2>
+                                    <label >
+                                        <p><b>شناسـه : {{ rent.id }}</b> </p>
+                                    </label>
+								</div>
+								<div>
+									<span>
+										<span>قیمت به ازای هر روز :<br> {{ rent.price | three_digit_count}}</span>
+									</span>
+                                        <span>
+                                            <select class="form-select form-select-lg mb-3" id="sizeDropdown" aria-label="Select size">
+                                                <option selected disabled >انتخاب سایز</option>
+                                                {% for product_size in size %}
+                                                        <option  value="{{ product_size.id }}">{{ product_size.size }}</option>
+                                                {% endfor %}
+
+                                            </select>
+                                            <select class="form-select form-select-lg mb-3" id="dayDropdown" aria-label="Select size">
+                                                <option selected disabled >بازه زمانی اجاره</option>
+                                                {% for product_day in day %}
+                                                        <option  value="{{ product_day.id }}">{{ product_day.text }}</option>
+                                                {% endfor %}
+
+                                            </select>
+                                            <br>
+                                            <br>
+                                            <label for="">تعداد :</label>
+    										<input min="1" max="{{ rent.count }}" type="number" value="1"
+                                                    class="search_box" id="product_count">
+                                            <br>
+                                            <br>
+                                            <label >
+                                                <p><b>موجـودی :</b>{{ rent.count }}</p>
+                                            </label>
+                                            <br>
+                                            <br>
+                                        {% if authenticated.authenticated %}
+                                            <button  onclick="addToRentOrder({{ rent.id }})" class="btn btn-warning cart pull-right">
+                                                     <i class="fa fa-shopping-cart "></i>
+						    					افـزودن به سبد اجاره
+                                            </button>
+                                            {% else %}
+                                            <div class="alert alert-warning">
+                                برای افزودن به سبد خرید ابتدا باید                  <a href="{% url 'Authenticated' %}"> احراز هویت  </a>خود را تکمیل کنید
+                                            </div>
+                                        {% endif %}
+
+									    </span>
+								</div>
+								<span class="socials-share share">
+									<ul>
+										<a href="https://t.me/Choob_lebasi">
+											<li>
+												<label>تلگرام</label>
+												<img src="/static/images/product-details/Telegram.png" style=''>
+											</li>
+										</a>
+										<a href="https://www.instagram.com/Choob_lebasi">
+											<li>
+												<label>اینستاگرام</label>
+												<img src="/static/images/product-details/Instagram.png">
+											</li>
+										</a>
+									</ul>
+								</span>
+
+							</div>
+						</div>
+					</div>
+                    <div class="category-tab shop-details-tab">
+						<div class="col-sm-12">
+							<ul class="nav nav-tabs">
+								<li class="active"><a href="#details" data-toggle="tab">جزئیات</a></li>
+								<li onclick="smoothToComment()" ><a href="#reviews" data-toggle="tab">دیدگاه ها ({{ comments_count}})</a></li>
+							</ul>
+						</div>
+						<div class="tab-content">
+							<div class="active in" id="details">
+								<p style="color: black">{{ rent.description }}</p>
+							</div>
+                        </div>
+                    </div>
+                    {% if related_products %}
+                        <div class="recommended_items">
+						    <h2 class="title text-center">محصولات پیشنهادی</h2>
+						    <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
+							    <div class="carousel-inner">
+								{% for category in related_products %}
+									<div class="item {% if forloop.first %}active{% endif %}">
+									    {% for product in category %}
+									    	<div class="col-sm-4">
+										        <div class="product-image-wrapper">
+											        <div class="single-products">
+												        <div class="productinfo text-center">
+                                                            <a href="{{ product.get_absolute_url }}">
+                                                                {% thumbnail product.image '500x500' crop='center'  as im %}
+                                                                    <img src="{{ im.url }}" alt="" >
+                                                            {% endthumbnail %}
+													        <h2>{{ product.price | three_digit_count}}</h2>
+													        <p>{{ product.title }}</p>
+                                                            <a href="{{ product.get_absolute_url }}">
+                                                                <button type="button" class="btn btn-default add-to-cart">
+                                                                <i class="fa fa-eye"></i>مشاهده محصول</button>
+                                                            </a>
+                                                            </a>
+
+												        </div>
+											        </div>
+										        </div>
+									        </div>
+
+									    {% endfor %}
+								    </div>
+								{% endfor %}
+                                </div>
+                                 {% if related_products|length > 1 %}
+                                    <a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
+                                        <i class="fa fa-angle-left"></i>
+                                    </a>
+                                    <a class="right recommended-item-control" href="#recommended-item-carousel" data-slide="next">
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+				        </div>
+                    {% endif %}
+                        {% if comments %}
+                            <h2 class="title text-center">دیدگاه ها</h2>
+                            <div  class="response-area"  >
+						        <ul class="media-list" id="reviews">
+                                    {% for comment in comments %}
+                                         <li class="media" id="single_">
+								             <a class="pull-right" href="#">
+									            {% thumbnail comment.user.avatar "121x86"  crop="center" as im %}
+                                                    <img  class="main object" src="{{ im.url }}">
+                                                {% endthumbnail %}
+								             </a>
+								             <div class="media-body">
+									            <ul class="sinlge-post-meta">
+										            <li><i class="fa fa-user"></i>{{ comment.user }}</li>
+										            <li><i class="fa fa-clock-o"></i>{{ comment.date_send|time }}</li>
+										            <li><i class="fa fa-calendar"></i> {{ comment.date_send|date }}</li>
+									             </ul>
+                                                <p>{{ comment.text }}</p>
+                                                {% if request.user.is_superuser %}
+                                                    <a class="btn btn-primary" onclick='fillAnswer({{ comment.id }})'><i class="fa fa-reply"></i>پاسـخ</a>
+                                                {% endif %}
+                                             </div>
+                                         </li>
+                                             {% for sub_comment in comment.rentcomment_set.all %}
+                                                  <li class="media second-media" id="single_">
+								                    <a class="pull-right" href="#">
+									                    {% thumbnail sub_comment.user.avatar "121x86"  crop="center" as im %}
+                                                             <img  class="main object" src="{{ im.url }}">
+                                                        {% endthumbnail %}
+                                                    </a>
+                                                    <div class="media-body">
+									                    <ul class="sinlge-post-meta">
+										                    <li><i class="fa fa-user"></i>{{ sub_comment.user }}</li>
+										                    <li><i class="fa fa-clock-o"></i> {{ sub_comment.date_send|time }}</li>
+										                    <li><i class="fa fa-calendar"></i> {{ sub_comment.date_send|date }}</li>
+									                    </ul>
+                                                        <p>{{ sub_comment.text }}</p>
+								                    </div>
+							                      </li>
+                                             {% endfor %}
+                                    {% endfor %}
+						        </ul>
+					        </div>
+                        {% endif %}
+                           <h2 class="title text-center"> درج دیدگاه</h2>
+                    <div class="replay-box" id="comment_form">
+						{% if request.user.is_authenticated %}
+							<div class="row">
+							    <div class="col-sm-12" >
+                                     <h2>دیدگاه خود را بنویسید:</h2>
+                                     <div class="text-area">
+                                        <input type="hidden" id="parent_id" value="">
+									    <div class="blank-arrow">
+										    <label>متن دیدگاه</label>
+									    </div>
+									    <span>*</span>
+									    <textarea name="message" rows="11" id="commentText"></textarea>
+									    <a class="btn btn-primary" onclick="sendRentComment({{ rent.id }},{{ sub_rent.id }})" >ارسـال دیدگاه</a>
+								     </div>
+							    </div>
+						    </div>
+                            {% else %}
+                            <div class="alert alert-warning">
+                                برای درج دیدگاه ابتدا باید <a href="{% url 'Login' %}"> وارد </a>شوید
+                            </div>
+						{% endif %}
+                    </div>
+                </div>
+{#                <div class="col-sm-3">#}
+{#					<div class="left-sidebar">#}
+{#						 <div class="shipping text-center">#}
+{#							{% for banner in banners %}#}
+{#                                {% thumbnail banner.image "300x200"  crop="center" as im %}#}
+{#                                    <br>#}
+{#                                    <a href="{{ banner.url_title }}">#}
+{#                                        <img  class="main object" src="{{ im.url }}" alt="{{ banner.title }}">#}
+{#                                    </a>#}
+{#                                {% endthumbnail %}#}
+{#							{% endfor %}#}
+{#                         </div>#}
+{#					</div>#}
+{#				</div>#}
+			</div>
+		</div>
+        <script>
+            function showLargeImage(src) {
+                $('#main_image').attr('src' ,src);
+                $('#show_large_modal').attr('href', src);
+            }
+            function smoothToComment(){
+                document.getElementById('reviews').scrollIntoView({behavior:"smooth"})
+            }
+            function addToRentOrder(productId) {
+                const productCount = $('#product_count').val();
+                const productSize = $('#sizeDropdown').val();
+                const productDay = $('#dayDropdown').val();
+                $.get('/order/add-to-rent-order', {
+                    product_id: productId,
+                    count: productCount,
+                    size: productSize,
+                    day: productDay
+                }).then(res => {
+                  // تنظیمات اولیه برای SweetAlert
+    let swalConfig = {
+        text: res.text,
+        icon: res.icon,
+        confirmButtonColor: "#428bca",
+        confirmButtonText: res.confirmButtonText,
+    };
+
+    // اگر استاتوس برابر با 'success' باشد، دکمه کنسل را هم اضافه می‌کنیم
+    if (res.status === 'success') {
+        swalConfig.cancelButtonText = res.cancelButtonText;
+        swalConfig.cancelButtonColor = '#FE980F';
+        swalConfig.showCancelButton = true;
+    }
+
+    Swal.fire(swalConfig).then(result => {
+        if (res.status === 'not_auth') {
+            window.location.href = '/login';
+        } else if (res.status === 'success' && result.isDismissed && result.dismiss === Swal.DismissReason.cancel) {
+            window.location.href = '/dashboard/user-basket';
+        }
+    });
+});
+            }
+        </script>
+	</section>
+{% endblock %}

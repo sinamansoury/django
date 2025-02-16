@@ -1,0 +1,25 @@
+<h2>دسته بندی محصولات</h2>
+						<div class="panel-group category-products" id="accordian">
+							{% for category in categories %}
+								<div class="panel panel-default">
+								    <div class="panel-heading">
+									    <h4 class="panel-title">
+                                            <a  href="{% url 'product_category_list' cat=category.url_title %}">
+                                                {{ category.title}}
+										    </a>
+									    </h4>
+								    </div>
+                                {% if category.productcategory_set.all%}
+                                    <div  class="panel-collapse in">
+                                          <div class="panel-body">
+                                              <ul>
+                                             {% for sub_category in category.productcategory_set.all %}
+                            	                <li><a href="{% url 'product_category_list' cat=sub_category.url_title %}">{{ sub_category.title }}</a></li>
+                                             {% endfor %}
+                                             </ul>
+                                          </div>
+                                     </div>
+                                 {% endif %}
+							    </div>
+							{% endfor %}
+                        </div>

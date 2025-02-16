@@ -1,0 +1,95 @@
+{% extends 'layout.html' %}
+{% load thumbnail %}
+{% load poll_extras %}
+
+{% block title %}
+	سفارش من/اجاره
+{% endblock %}
+
+{% block content %}
+
+{% if order.orderingrentitem_set.all %}
+    <section id="cart_items">
+		<div class="container">
+			<div class="table-responsive cart_info"  style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);overflow: hidden; border-radius: 10px; margin-bottom: 15px">
+				<table class="table table-condensed ">
+					<thead>
+						<tr class="cart_menu">
+							<td class="image text-center">کـالا</td>
+							<td class="description "></td>
+							<td class="day text-center">بازه زمانی</td>
+							<td class="price text-center">قیمت</td>
+							<td class="quantity text-center">تعـداد</td>
+							<td class="total text-center">مجمـوع</td>
+                            <td></td>
+						</tr>
+					</thead>
+					<tbody>
+						{% for detail in order.orderingrentitem_set.all %}
+							<tr>
+							<td class="cart_product ">
+								{% thumbnail detail.product.image '110x110' crop='center' as im %}
+                                    <a href="{{ detail.product.get_absolute_url  }}">
+                                        <img  src="{{ im.url }}" alt="">
+                                    </a>
+								{% endthumbnail %}
+							</td>
+							<td class="cart_description text-center" >
+								<h4><a  class="cursor-pointer" href="{{ detail.rent.get_absolute_url  }}" >{{ detail.product.title }}</a></h4>
+                                <h4>    سایز:  {{ detail.size }}  </h4>
+								<p>شناسـه : {{ detail.product.id }}</p>
+							</td>
+                            <td class="cart_day text-center">
+                                <p>{{ detail.day }}</p>
+                            </td>
+							<td class="cart_price text-center">
+								<p>{{ detail.product.price|three_digit_count }}</p>
+							</td>
+							<td class="cart_quantity">
+                                <div class=" quantity ">
+                                    {{ detail.total_quantity }}
+                                </div>
+							</td>
+							<td class="cart_total text-center">
+								<p class="cart_total_price">{{ detail.total_price|three_digit_count}}</p>
+							</td>
+
+						</tr>
+						{% endfor %}
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</section>
+        <section id="do_action">
+		<div class="container">
+			<div class="row" >
+				<div class="col-sm-6">
+					<div class="total_area">
+						<ul >
+							<li>وضعیت سفارش<span>تحویل داده شده</span></li>
+							<li>گیرنده<span>{{ order.user }}</span></li>
+							<li>آدرس<span>{{ order.user.address }}</span></li>
+							<li>شماره موبایل<span>0{{ order.user.phone }}</span></li>
+						</ul>
+
+					</div>
+				</div>
+                <div class="col-sm-6" >
+					<div class="total_area" >
+						<ul>
+							<li>مجمـوع سبـد خریـد <span>{% plus total_prices %}</span></li>
+							<li>هزینه ارسال <span>رایگان</span></li>
+							<li>شماره سفارش <span>{{ order.id }}</span></li>
+							<li>نوع ارسال<span>عادی</span></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+        </div>
+	</section>
+
+{% endif%}
+
+{% endblock %}

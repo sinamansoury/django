@@ -1,0 +1,17 @@
+{% load thumbnail %}
+{% load poll_extras %}
+<div class="col-sm-4">
+    <div class="product-image-wrapper" style="margin-top: 0">
+        <div class="single-products">
+            <a href="{% url 'product_detail' slug=product.slug %}">
+                <div class="productinfo text-center">
+                {% thumbnail product.image "268x250" crop="center" as im %}
+                    <img src="{{ im.url }}">
+                {% endthumbnail %}
+                <h2>{{ product.price | three_digit_count }}</h2>
+                <p>{{ product.short_description}}</p>
+            </div>
+            </a>
+        </div>
+    </div>
+</div>

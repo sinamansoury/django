@@ -1,0 +1,65 @@
+{% load thumbnail %}
+{% load poll_extras %}
+{% load render_partial %}
+<section id="cart_items" style="margin-top: 12px">
+   <div class="row">
+        <div class="col-md-3 pull-right" style="padding: 0 5px">
+        {% render_partial 'User_panel.views.user_panel_rent_components' %}
+    </div>
+    <div class="container col-sm-9" style="margin-top: 15px" >
+        {% if order %}
+            {% for orders in order %}
+        <div class="table-responsive cart_info" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);overflow: hidden; border-radius: 10px; margin-bottom: 15px; width: 1000px">
+            <table class="table table-condensed" style="margin-bottom: 0">
+                <tr class="cart_menu">
+                    <td class=" text-center" style="width: 35%">شماره سفارش<br>
+                        <div class="text-center">
+                            <span>{{ orders.id }}</span>
+                        </div>
+                    </td>
+                   <td class="text-center" style="width: 20%">
+                        مبلغ کل<br>
+                        <div class="cart_price text-center">
+                            <ul>
+                                {% with order_prices|get_item:orders.id as prices %}
+    <span>{% total prices %}</span>
+{% endwith %}
+                            </ul>
+                        </div>
+                    </td>
+                    <td style="width: 20%">تاریخ ثبت سفارش
+                        <div class="text-center">
+                            <span>{{ orders.date }}</span>
+                        </div>
+                    </td>
+                    <td style="width: 15%">
+                        <a class="inline-elements" href="{% url 'orders-rent-detail' order_rent_id=orders.id %}">
+                            <p>جزییات</p>
+                            <p class="fa fa-arrow-circle-left"></p>
+                        </a>
+                    </td>
+
+                </tr>
+                <tr  >
+                    <td  style="padding: 24px" >
+                        {% for detail in orders.orderingrentitem_set.all %}
+                        {% thumbnail detail.product.image '110x110' crop='center' as im %}
+                        <a class="position-relatives" href="{{ detail.product.get_absolute_url }}">
+                            <img style="border-radius: 5px" src="{{ im.url }}" alt="" >
+                            <span class="position-absolute badge rounded-pill bg-danger" style="top: 0; left: 0; transform: translate(50%, -220%); background-color: #FE980F; color: white; padding: 5px 10px; font-weight: bold; box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);">
+                                {{ detail.total_quantity }}
+                            </span>
+                        </a>
+                        {% endthumbnail %}
+                        {% endfor %}
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+   </div>
+
+</section>

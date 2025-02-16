@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+{% load render_partial %}
+{% block title %}
+    احراز هویت
+{% endblock %}
+{% block content %}
+    <div class="col-md-3 pull-right">
+            {% render_partial 'User_panel.views.user_panel_components' %}
+        </div>
+    <div class="container">
+            <form enctype="multipart/form-data" action="{% url 'Authenticated' %}" method="post" class="form-container">
+                {% csrf_token %}
+                <div class="form-section">
+                    <h2>کارت ملی</h2>
+                    <div class="form-group">
+                        <label for="front_pic">{{ form.front_pic.label }}</label>
+                        {{ form.front_pic }}
+                    </div>
+                    <div class="form-group">
+                        <label for="back_pic">{{ form.back_pic.label }}</label>
+                        {{ form.back_pic }}
+                    </div>
+                </div>
+{#                <div class="form-section">#}
+{#                    <h2>عکس سلفی</h2>#}
+{#                    <div class="form-group">#}
+{#                        <label for="pic">{{ form.pic.label }}</label>#}
+{#                        <a href=""><p class="alert-warning text-right" >نکات قابل توجه!</p></a>#}
+{#                        {{ form.pic }}#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="form-section">#}
+{#                    <h2>تاییدیه پستی</h2>#}
+{#                    <div class="form-group">#}
+{#                        <label for="address_auth_pic">{{ form.address_auth_pic.label }}</label>#}
+{#                        {{ form.address_auth_pic }}#}
+{#                    </div>#}
+{#                    <div class="form-group">#}
+{#                        <label for="address_auth">{{ form.address_auth.label }}</label>#}
+{#                        <p class="button alert-warning text-right" >توجه: کدپستی 10 رقم است!</p>#}
+{#                        {{ form.address_auth }}#}
+{#                        {{ form.address_auth.errors }}#}
+{#                    </div>#}
+{#                </div>#}
+                <div class="text-center">
+                    <button type="submit" class="btn btn-warning">ثبت</button>
+                </div>
+            </form>
+        </div>
+
+{% endblock %}

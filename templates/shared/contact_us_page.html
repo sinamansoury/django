@@ -1,0 +1,92 @@
+{% extends 'layout.html' %}
+{% block title %}
+    تماس با ما
+{% endblock %}
+{% block content %}
+	<div id="contact-page" class="container">
+    	<div class="bg">
+	    	<div class="row">
+				<div class="container">
+	    			<div class="col-sm-12" style="overflow: hidden; margin-bottom: 40px">
+						<h2 class="title text-center">تمـاس با مـا</h2>    			    						
+                        <div id="gmap" class="contact-map">
+								<img src="/static/images/home/Map.jpg" alt="Map">
+							</div>
+					</div>
+				</div>
+				</div>
+    		<div class="row">
+	    		<div class="col-sm-8">
+	    			<div class="contact-form">
+	    				<h2 class="title text-center">با ما در ارتباط باشیـد</h2>
+	    				<div class="status alert alert-success" style="display: none"></div>
+				    	<form id="main-contact-form" class="contact-form row" name="contact-form" action="{% url 'contact_us' %}" method="post" >
+                            {% csrf_token %}
+                            
+                            <div class="form-grou col-md-6 " >
+                                {{ form.email.label_tag }}
+                                {{ form.email }}
+                                {{ form.email.errors }}
+                            </div>
+                            
+                            <div class="form-grou col-md-6 " >
+                                {{ form.fullname.label_tag }}
+                                {{ form.fullname }}
+                                {{ form.fullname.errors }}
+                            </div>
+                            
+                            <div class="form-grou col-md-12 ">
+                                {{ form.title.label_tag }}
+                                {{ form.title}}
+                                {{ form.title.errors }}
+                            </div>
+                            
+                            <div class="form-grou col-md-12 ">
+                                {{ form.message.label_tag }}
+                                {{ form.message}}
+                                {{ form.message.errors }}
+                            </div>
+                            
+				            <div class="form-grou col-md-12">
+				                <input type="submit" name="submit" class="btn btn-primary pull-right" value="ارسـال">
+				            </div>
+				        </form>
+	    			</div>
+	    		</div>
+	    		<div class="col-sm-4">
+	    			<div class="contact-info">
+	    				<h2 class="title text-center">اطلاعات تماس</h2>
+	    				<address>
+	    					<p>{{ about_us_setting.name }}</p>
+							<p>{{ about_us_setting.address }}</p>
+							<p>تلفن تماس : {{ about_us_setting.phone_number }}</p>
+                            {% if about_us_setting.email %}
+                                <p style="font-family: tahoma;">ایمیـل : {{ about_us_setting.email }}</p>
+                            {% endif %} 
+	    				</address>
+	    				<div class="social-networks">
+	    					<h2 class="title text-center">شبکـه های اجتـماعی</h2>
+							<span class="socials-share share">
+									<ul>
+										
+										<a href="https://t.me/S22ina">
+											<li>
+												<label>تلگرام</label>
+												<img src="/static/images/product-details/Telegram.png">
+											</li>
+										</a>
+										<a href="https://www.instagram.com/sinamansouri81">
+											<li>
+												<label>اینستاگرام</label>
+												<img src="/static/images/product-details/Instagram.png">
+											</li>
+										</a>
+									</ul>
+								</span>
+	    				</div>
+	    			</div>
+    			</div>
+	    	</div>
+    	</div>
+    </div>
+{% endblock %}

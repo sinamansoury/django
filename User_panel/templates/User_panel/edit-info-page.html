@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+{% load thumbnail %}
+{% load render_partial %}
+
+{% block title %}
+	ویرایش اطلاعات
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+    <div class="row">
+        <div class="col-md-4 pull-right">
+
+            {% render_partial 'User_panel.views.user_panel_components' %}
+            {% thumbnail  current_user.avatar '150x100'  crop='center' quality=99 as im  %}
+                    <a  class="thumbnail">
+                    <img width='100%' src="{{ im.url }}" alt="">
+                     </a>
+                {% endthumbnail %}
+        </div>
+        <div class="col-md-8 edit" style="margin-top: 15px">
+            <form enctype="multipart/form-data" action="{% url 'Edit-profile' %}" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">ثبت</button>
+            </form>
+        </div>
+
+    </div>
+    </div>
+{% endblock %}

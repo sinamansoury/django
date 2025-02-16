@@ -1,0 +1,82 @@
+{% extends 'layout.html' %}
+{% load render_partial %}
+
+{% block title %}
+    داشبورد
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 pull-right">
+                {% render_partial 'User_panel.views.user_panel_components' %}
+            </div>
+            <div class="col-sm-9 container-fluid">
+                <div class="panel-container">
+                    <h2>مشخصات و اطلاعات تماس</h2>
+
+                    <div class="user-info">
+                        <div class="info-item">
+                            <label>نام و نام خانوادگی:</label>
+                            {% if user.first_name or user.last_name %}
+                                <span>{{ user.get_full_name }}</span>
+                            {% else %}
+                                <span>-</span>
+                            {% endif %}
+                        </div>
+                        <div class="info-item">
+                            <label>کد ملی:</label>
+                            {% if user.id_code %}
+                                <span>0{{ user.id_code }}</span>
+                            {% else %}
+                                <span>-</span>
+                            {% endif %}
+                        </div>
+                        <div class="info-item">
+                            <label>تاریخ تولد:</label>
+                            {% if user.birthday %}
+                                <span>{{ user.birthday }}</span>
+                            {% else %}
+                                <span>-</span>
+                            {% endif %}
+                        </div>
+                        <div class="info-item">
+                            <label>شماره موبایل:</label>
+                            {% if user.phone %}
+                                <span>0{{ user.phone }}</span>
+                            {% else %}
+                                <span>-</span>
+                            {% endif %}
+                        </div>
+                        <div class="info-item">
+                            <label>آدرس:</label>
+
+                            {% if user.address %}
+                                <span>{{ user.address }}</span>
+                            {% else %}
+                                <span>-</span>
+                            {% endif %}
+                        </div>
+                        <div class="info-item1">
+                            <label>ایمیل:</label>
+
+                            {% if user.email %}
+                                <span>{{ user.email }}</span>
+                            {% else %}
+                                <span>-</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="button-container">
+                        <a href="{% url 'Change-password' %}">
+                            <button type="button" class="btn btn-primary">تغییر رمز عبور</button>
+                        </a>
+                        <a href="{% url 'Edit-profile' %}">
+                            <button type="button" class="btn btn-primary">ویرایش اطلاعات</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
