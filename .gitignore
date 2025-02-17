@@ -7,6 +7,7 @@
 # پوشه‌های استاتیک (Django)
 /static/
 /media/
+/uploads/
 
 # پوشه‌های مربوط به venv
 venv/
