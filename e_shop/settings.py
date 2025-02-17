@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-
+import os
+import dj_database_url
 from PIL.ImImagePlugin import MODE
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -97,6 +98,9 @@ AUTH_USER_MODEL = 'Account.User'
 LOGIN_URL = '/login'
 MERCHANT = "00000000-0000-0000-0000-000000000000"
 SANDBOX = True
+# DATABASES = {
+#     'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
