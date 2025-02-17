@@ -17,20 +17,20 @@ class TestContactUsCreateView(TestCase):
 
     def test_contact_us_create_view_POST_valid(self):
         response = self.client.post(reverse('contact_us'), data={
-            'fullname':'sina',
+            'fullname':'user_test',
             'email':'john.doe@example.com',
-            'title':'sina',
-            'message':'sina',
+            'title':'user_test',
+            'message':'user_test',
         })
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('contact_us'))
 
     def test_contact_us_create_view_POST_invalid(self):
         response = self.client.post(reverse('contact_us'), data={
-            'fullname': 'sina',
+            'fullname': 'user_test',
             'email': '',
-            'title': 'sina',
-            'message': 'sina',
+            'title': 'user_test',
+            'message': 'user_test',
         })
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'shared/contact_us_page.html')

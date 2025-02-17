@@ -5,7 +5,7 @@ from ..forms import ContactUsModelForm
 class TestContactUsModelForm(TestCase):
     def test_valid_form(self):
         form = ContactUsModelForm(data={
-            'fullname': 'sina',
+            'fullname': 'user_test',
             'email': 'john.doe@example.com',
             'title': 'Test Title',
             'message': 'This is a test message.'
