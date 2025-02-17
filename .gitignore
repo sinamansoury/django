@@ -1,8 +1,15 @@
 # فایل‌های دیتابیس SQLite
-*.sqlite3
+db.sqlite3
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+
 
 # فایل‌های محیطی
 .env
+.env.*
 
 # پوشه‌های استاتیک (Django)
 /static/
@@ -12,3 +19,9 @@
 # پوشه‌های مربوط به venv
 venv/
 .venv
+
+.idea/
+
+*.bak
+*.tmp
+__pycache__/
